@@ -1,0 +1,52 @@
+Build a CI/CD Pipeline Health Dashboard to monitor executions from tools like GitHub Actions or Jenkins.
+The dashboard should:
+· Collect data on pipeline executions (success/failure, build time, status).
+· Show real-time metrics:
+o Success/Failure rate
+o Average build time
+o Last build status
+· Send alerts (via Slack or Email) on pipeline failures.
+· Provide a simple frontend UI to:
+o Visualize pipeline metrics
+o Display logs/status of latest builds
+This should simulate how modern engineering teams monitor the health of their CI/CD systems using automation, observability, and actionable alerting.
+
+✅ Expected Outcome
+The candidate is expected to use GitHub Copilot or Cursor IDE + GPT-4 for ideation, design, and development assistance.
+
+📦 Deliverables
+1. 📜 Instructions/Prompts
+· Public links or text logs of prompts used with Copilot, Cursor, or ChatGPT.
+2. 🧠 Requirement Analysis Document
+· Use GPT/CoPilot/Cursor to analyze/expand the requirement.
+· Present understanding in terms of:
+o Key features
+o Tech choices
+o APIs/tools required
+3. 🏗️ Tech Design Document
+· High-level architecture
+· API structure (routes, sample response)
+· DB schema
+· UI layout (explanation)
+4. 🔧 Source Code Repository
+· Complete source code hosted on GitHub (public or share access)
+· Should include:
+o Backend (Node.js/Python etc.)
+o Frontend (React/Vue or any)
+o DB (SQLite/PostgreSQL /)
+o Alerting service integration
+5. 🚢 Deployment
+· Containerize the app (Docker)
+6. 📖 Documentation
+· README.md containing:
+o Setup & run instructions
+o Architecture summary
+o How AI tools were used (with prompt examples)
+o Key learning and assumptions
+🧾 Submission Items
+· GitHub Repository with complete source code, need to update the Link for repo in below excel.
+· Prompt Logs, Requirement Analysis Document, Tech Design Document, README.md All needs to uploaded in repo itself with following name (txt , md, docx)
+o prompot_logs.md / prompot_logs.txt
+o Requirement_analysis_document.md / requirment_analysis_document.docx
+o tech_design_document.md / tech_design_document.docx
+o Readme.md
