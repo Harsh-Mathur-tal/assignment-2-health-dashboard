@@ -1,13 +1,12 @@
-import { Router, Response } from 'express';
-import { AuthRequest } from '../middleware/auth';
+import { Router, Request, Response } from 'express';
 import { asyncHandler } from '../middleware/errorHandler';
 import { logger } from '../utils/logger';
 
 const router = Router();
 
 // GET /api/integrations - List integrations
-router.get('/', asyncHandler(async (req: AuthRequest, res: Response) => {
-  logger.info('Fetching integrations', { userId: req.user?.id });
+router.get('/', asyncHandler(async (req: Request, res: Response) => {
+  logger.info('Fetching integrations');
 
   const mockIntegrations = [
     {
@@ -43,13 +42,13 @@ router.get('/', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // POST /api/integrations - Add integration
-router.post('/', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.post('/', asyncHandler(async (req: Request, res: Response) => {
   const { name, platform, configuration } = req.body;
 
   logger.info('Creating integration', { 
     name, 
     platform, 
-    userId: req.user?.id 
+    userId: "system" 
   });
 
   const newIntegration = {
@@ -58,7 +57,7 @@ router.post('/', asyncHandler(async (req: AuthRequest, res: Response) => {
     platform,
     configuration,
     isActive: true,
-    createdBy: req.user?.id,
+    createdBy: "system",
     createdAt: new Date(),
     updatedAt: new Date()
   };
@@ -71,13 +70,13 @@ router.post('/', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // PUT /api/integrations/:id - Update integration
-router.put('/:id', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.put('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, configuration, isActive } = req.body;
 
   logger.info('Updating integration', { 
     integrationId: id, 
-    userId: req.user?.id 
+    userId: "system" 
   });
 
   const updatedIntegration = {
@@ -97,12 +96,12 @@ router.put('/:id', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // DELETE /api/integrations/:id - Remove integration
-router.delete('/:id', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.delete('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
 
   logger.info('Deleting integration', { 
     integrationId: id, 
-    userId: req.user?.id 
+    userId: "system" 
   });
 
   res.json({
@@ -112,12 +111,12 @@ router.delete('/:id', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // POST /api/integrations/:id/test - Test integration
-router.post('/:id/test', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.post('/:id/test', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
 
   logger.info('Testing integration', { 
     integrationId: id, 
-    userId: req.user?.id 
+    userId: "system" 
   });
 
   // Mock test result

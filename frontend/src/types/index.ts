@@ -34,17 +34,6 @@ export enum UserRole {
   VIEWER = 'viewer',
 }
 
-// Auth Types
-export interface LoginCredentials {
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  user: User;
-  token: string;
-  refreshToken: string;
-}
 
 // Pipeline Types
 export interface Pipeline {

@@ -1,16 +1,14 @@
-import { Router, Response } from 'express';
-import { AuthRequest } from '../middleware/auth';
+import { Router, Request, Response } from 'express';
 import { asyncHandler } from '../middleware/errorHandler';
 import { logger } from '../utils/logger';
 
 const router = Router();
 
 // GET /api/pipelines - List all pipelines
-router.get('/', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.get('/', asyncHandler(async (req: Request, res: Response) => {
   const { page = 1, limit = 10, platform, status, search } = req.query;
 
   logger.info('Fetching pipelines', { 
-    userId: req.user?.id, 
     filters: { platform, status, search } 
   });
 
@@ -83,10 +81,10 @@ router.get('/', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // GET /api/pipelines/:id - Get pipeline details
-router.get('/:id', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.get('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  logger.info('Fetching pipeline details', { pipelineId: id, userId: req.user?.id });
+  logger.info('Fetching pipeline details', { pipelineId: id, userId: "system" });
 
   // Mock pipeline details
   const mockPipeline = {
@@ -122,14 +120,14 @@ router.get('/:id', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // POST /api/pipelines - Create new pipeline
-router.post('/', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.post('/', asyncHandler(async (req: Request, res: Response) => {
   const { name, repositoryUrl, platform, workflowId, configuration } = req.body;
 
   logger.info('Creating new pipeline', { 
     name, 
     repositoryUrl, 
     platform, 
-    userId: req.user?.id 
+    userId: "system" 
   });
 
   // Mock created pipeline
@@ -141,7 +139,7 @@ router.post('/', asyncHandler(async (req: AuthRequest, res: Response) => {
     workflowId,
     configuration,
     status: 'active',
-    createdBy: req.user?.id,
+    createdBy: "system",
     createdAt: new Date(),
     updatedAt: new Date()
   };
@@ -154,11 +152,11 @@ router.post('/', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // PUT /api/pipelines/:id - Update pipeline
-router.put('/:id', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.put('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { name, configuration, status } = req.body;
 
-  logger.info('Updating pipeline', { pipelineId: id, userId: req.user?.id });
+  logger.info('Updating pipeline', { pipelineId: id, userId: "system" });
 
   // Mock updated pipeline
   const updatedPipeline = {
@@ -183,10 +181,10 @@ router.put('/:id', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // DELETE /api/pipelines/:id - Delete pipeline
-router.delete('/:id', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.delete('/:id', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  logger.info('Deleting pipeline', { pipelineId: id, userId: req.user?.id });
+  logger.info('Deleting pipeline', { pipelineId: id, userId: "system" });
 
   res.json({
     success: true,
@@ -195,13 +193,13 @@ router.delete('/:id', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // GET /api/pipelines/:id/runs - Get pipeline runs
-router.get('/:id/runs', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.get('/:id/runs', asyncHandler(async (req: Request, res: Response) => {
   const { id } = req.params;
   const { page = 1, limit = 10, status, branch } = req.query;
 
   logger.info('Fetching pipeline runs', { 
     pipelineId: id, 
-    userId: req.user?.id,
+    userId: "system",
     filters: { status, branch }
   });
 

@@ -13,11 +13,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Avatar,
-  Menu,
-  MenuItem,
   useTheme,
-  useMediaQuery,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -25,39 +21,19 @@ import {
   AccountTree as PipelineIcon,
   Warning as AlertIcon,
   Settings as SettingsIcon,
-  Logout as LogoutIcon,
-  Person as PersonIcon,
 } from '@mui/icons-material';
-import { useAuthStore } from '@/hooks/useAuthStore';
 
 const drawerWidth = 240;
 
 const Layout: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
   const navigate = useNavigate();
-  const { user, logout } = useAuthStore();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
-  };
-
-  const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleProfileClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleLogout = () => {
-    logout();
-    handleProfileClose();
-    navigate('/login');
   };
 
   const menuItems = [
@@ -80,12 +56,7 @@ const Layout: React.FC = () => {
           <ListItem key={item.text} disablePadding>
             <ListItemButton
               selected={location.pathname === item.path}
-              onClick={() => {
-                navigate(item.path);
-                if (isMobile) {
-                  setMobileOpen(false);
-                }
-              }}
+              onClick={() => navigate(item.path)}
               sx={{
                 '&.Mui-selected': {
                   backgroundColor: theme.palette.primary.main + '15',
@@ -134,66 +105,18 @@ const Layout: React.FC = () => {
           
           <Box sx={{ flexGrow: 1 }} />
           
-          {/* User Profile */}
-          <IconButton onClick={handleProfileClick} sx={{ p: 0 }}>
-            <Avatar sx={{ bgcolor: theme.palette.primary.main }}>
-              {user?.firstName?.[0] || user?.email[0].toUpperCase()}
-            </Avatar>
-          </IconButton>
-          
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleProfileClose}
-            onClick={handleProfileClose}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-                overflow: 'visible',
-                filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-                mt: 1.5,
-                '& .MuiAvatar-root': {
-                  width: 32,
-                  height: 32,
-                  ml: -0.5,
-                  mr: 1,
-                },
-                '&:before': {
-                  content: '""',
-                  display: 'block',
-                  position: 'absolute',
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
-                  bgcolor: 'background.paper',
-                  transform: 'translateY(-50%) rotate(45deg)',
-                  zIndex: 0,
-                },
-              },
-            }}
-            transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-            anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-          >
-            <MenuItem onClick={handleProfileClose}>
-              <PersonIcon sx={{ mr: 2 }} />
-              Profile
-            </MenuItem>
-            <Divider />
-            <MenuItem onClick={handleLogout}>
-              <LogoutIcon sx={{ mr: 2 }} />
-              Logout
-            </MenuItem>
-          </Menu>
+          {/* Application Title */}
+          <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
+            Pipeline Health Monitor
+          </Typography>
         </Toolbar>
       </AppBar>
 
-      {/* Navigation Drawer */}
+      {/* Mobile drawer */}
       <Box
         component="nav"
         sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
       >
-        {/* Mobile drawer */}
         <Drawer
           variant="temporary"
           open={mobileOpen}
@@ -211,7 +134,7 @@ const Layout: React.FC = () => {
         >
           {drawer}
         </Drawer>
-        
+
         {/* Desktop drawer */}
         <Drawer
           variant="permanent"
@@ -220,8 +143,6 @@ const Layout: React.FC = () => {
             '& .MuiDrawer-paper': {
               boxSizing: 'border-box',
               width: drawerWidth,
-              borderRight: '1px solid',
-              borderColor: 'divider',
             },
           }}
           open
@@ -235,12 +156,13 @@ const Layout: React.FC = () => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
           width: { md: `calc(100% - ${drawerWidth}px)` },
-          mt: 8, // Account for AppBar height
         }}
       >
-        <Outlet />
+        <Toolbar />
+        <Box sx={{ p: 3 }}>
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );

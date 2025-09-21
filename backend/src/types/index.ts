@@ -127,6 +127,8 @@ export enum AlertType {
 export enum NotificationType {
   SLACK = 'slack',
   EMAIL = 'email',
+  DISCORD = 'discord',
+  TEAMS = 'teams',
   WEBHOOK = 'webhook',
   SMS = 'sms',
 }
@@ -162,8 +164,8 @@ export interface NotificationStatus {
 export interface User {
   id: string;
   email: string;
-  firstName?: string;
-  lastName?: string;
+  firstName: string;
+  lastName: string;
   role: UserRole;
   isActive: boolean;
   createdAt: Date;
@@ -172,6 +174,7 @@ export interface User {
 
 export enum UserRole {
   ADMIN = 'admin',
+  DEVELOPER = 'developer',
   USER = 'user',
   VIEWER = 'viewer',
 }
@@ -292,9 +295,6 @@ export interface SystemStatus {
 }
 
 // Request/Response Types
-export interface AuthRequest extends Request {
-  user?: User;
-}
 
 export interface LoginRequest {
   email: string;

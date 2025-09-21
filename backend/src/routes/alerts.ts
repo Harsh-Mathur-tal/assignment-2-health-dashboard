@@ -1,13 +1,12 @@
-import { Router, Response } from 'express';
-import { AuthRequest } from '../middleware/auth';
+import { Router, Request, Response } from 'express';
 import { asyncHandler } from '../middleware/errorHandler';
 import { logger } from '../utils/logger';
 
 const router = Router();
 
 // GET /api/alerts - List alert configurations
-router.get('/', asyncHandler(async (req: AuthRequest, res: Response) => {
-  logger.info('Fetching alert configurations', { userId: req.user?.id });
+router.get('/', asyncHandler(async (req: Request, res: Response) => {
+  logger.info('Fetching alert configurations');
 
   const mockAlerts = [
     {
@@ -52,13 +51,13 @@ router.get('/', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // POST /api/alerts - Create alert rule
-router.post('/', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.post('/', asyncHandler(async (req: Request, res: Response) => {
   const { pipelineId, name, alertType, conditions, notificationChannels } = req.body;
 
   logger.info('Creating alert configuration', { 
     pipelineId, 
     alertType, 
-    userId: req.user?.id 
+    userId: "system" 
   });
 
   const newAlert = {
@@ -69,7 +68,7 @@ router.post('/', asyncHandler(async (req: AuthRequest, res: Response) => {
     conditions,
     notificationChannels,
     isActive: true,
-    createdBy: req.user?.id,
+    createdBy: "system",
     createdAt: new Date(),
     updatedAt: new Date()
   };
@@ -82,11 +81,11 @@ router.post('/', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // GET /api/alerts/history - Alert history
-router.get('/history', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.get('/history', asyncHandler(async (req: Request, res: Response) => {
   const { page = 1, limit = 10, severity, pipelineId } = req.query;
 
   logger.info('Fetching alert history', { 
-    userId: req.user?.id,
+    userId: "system",
     filters: { severity, pipelineId }
   });
 

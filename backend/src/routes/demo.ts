@@ -1,5 +1,4 @@
-import { Router, Response } from 'express';
-import { AuthRequest } from '../middleware/auth';
+import { Router, Request, Response } from 'express';
 import { asyncHandler } from '../middleware/errorHandler';
 import { logger } from '../utils/logger';
 import { emailService } from '../services/emailService';
@@ -7,10 +6,10 @@ import { emailService } from '../services/emailService';
 const router = Router();
 
 // POST /api/demo/alert-email - Send test alert email
-router.post('/alert-email', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.post('/alert-email', asyncHandler(async (req: Request, res: Response) => {
   const recipient = process.env.DEMO_EMAIL_RECIPIENT || 'harsh.mathur@talentica.com';
   
-  logger.info('Sending demo alert email', { recipient, userId: req.user?.id });
+  logger.info('Sending demo alert email', { recipient, userId: "system" });
 
   const alertData = {
     pipelineName: 'Frontend CI/CD Demo Pipeline',
@@ -46,10 +45,10 @@ router.post('/alert-email', asyncHandler(async (req: AuthRequest, res: Response)
 }));
 
 // POST /api/demo/pipeline-run - Simulate a pipeline run that triggers alerts
-router.post('/pipeline-run', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.post('/pipeline-run', asyncHandler(async (req: Request, res: Response) => {
   const { status = 'failed', pipelineId = 'demo-pipeline-1' } = req.body;
   
-  logger.info('Simulating pipeline run', { status, pipelineId, userId: req.user?.id });
+  logger.info('Simulating pipeline run', { status, pipelineId, userId: "system" });
 
   // Simulate pipeline run data
   const pipelineRun = {
@@ -60,7 +59,7 @@ router.post('/pipeline-run', asyncHandler(async (req: AuthRequest, res: Response
     duration: Math.floor(Math.random() * 300) + 60, // 60-360 seconds
     branch: 'main',
     commitSha: Math.random().toString(36).substring(2, 15),
-    triggeredBy: req.user?.email || 'demo@example.com',
+    triggeredBy: 'demo@example.com',
     startTime: new Date(Date.now() - 300000), // 5 minutes ago
     endTime: new Date(),
     timestamp: new Date(),
@@ -110,8 +109,8 @@ router.post('/pipeline-run', asyncHandler(async (req: AuthRequest, res: Response
 }));
 
 // GET /api/demo/test-email - Test email configuration
-router.get('/test-email', asyncHandler(async (req: AuthRequest, res: Response) => {
-  logger.info('Testing email configuration', { userId: req.user?.id });
+router.get('/test-email', asyncHandler(async (req: Request, res: Response) => {
+  logger.info('Testing email configuration', { userId: "system" });
 
   const connectionTest = await emailService.testEmailConnection();
   
@@ -128,8 +127,8 @@ router.get('/test-email', asyncHandler(async (req: AuthRequest, res: Response) =
 }));
 
 // POST /api/demo/sample-data - Create sample pipeline data
-router.post('/sample-data', asyncHandler(async (req: AuthRequest, res: Response) => {
-  logger.info('Creating sample demo data', { userId: req.user?.id });
+router.post('/sample-data', asyncHandler(async (req: Request, res: Response) => {
+  logger.info('Creating sample demo data', { userId: "system" });
 
   // This would typically insert into database
   // For demo, we'll just return the sample data that would be created
@@ -195,7 +194,7 @@ router.post('/sample-data', asyncHandler(async (req: AuthRequest, res: Response)
 }));
 
 // GET /api/demo/status - Get demo status and configuration
-router.get('/status', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.get('/status', asyncHandler(async (req: Request, res: Response) => {
   const demoStatus = {
     environment: process.env.NODE_ENV,
     emailConfigured: !!process.env.EMAIL_USER,

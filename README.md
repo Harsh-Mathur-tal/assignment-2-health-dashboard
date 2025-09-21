@@ -12,7 +12,7 @@ A comprehensive real-time monitoring and alerting system for CI/CD pipelines. Mo
 
 ### Smart Alerting
 - **Intelligent Alerts** - Configurable rules for failures, performance degradation, success rate drops
-- **Multi-Channel Notifications** - Slack, Email, SMS, and webhook integrations
+- **Multi-Channel Notifications** - Discord, Teams, Slack, Email, SMS, and webhook integrations
 - **Alert History** - Track and analyze alert patterns over time
 - **Customizable Thresholds** - Set performance and reliability thresholds per pipeline
 
@@ -32,7 +32,7 @@ A comprehensive real-time monitoring and alerting system for CI/CD pipelines. Mo
 - **Database**: PostgreSQL 15+ with TimescaleDB for time-series data
 - **Caching**: Redis for sessions, caching, and real-time subscriptions
 - **Real-time**: Socket.io for WebSocket connections
-- **Security**: JWT authentication with refresh tokens
+- **Security**: Secure HTTP headers and CORS protection
 
 #### Frontend
 - **Framework**: React 18+ with TypeScript
@@ -79,11 +79,8 @@ docker-compose down
 - **Backend API**: http://localhost:3001
 - **Health Check**: http://localhost:3001/health
 
-### 4. Default Login Credentials
-```
-Email: admin@example.com
-Password: password123
-```
+### 4. Direct Access
+The application loads directly without requiring authentication. Simply navigate to http://localhost:3000 to access all features immediately.
 
 ## 🛠️ Development Setup
 

@@ -11,14 +11,9 @@ import Pipelines from '@/pages/Pipelines';
 import PipelineDetails from '@/pages/PipelineDetails';
 import Alerts from '@/pages/Alerts';
 import Settings from '@/pages/Settings';
-import Login from '@/pages/Login';
 
 // Components
 import Layout from '@/components/Layout';
-import ProtectedRoute from '@/components/ProtectedRoute';
-
-// Hooks
-import { useAuthStore } from '@/hooks/useAuthStore';
 
 // Create theme
 const theme = createTheme({
@@ -90,8 +85,6 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  const { isAuthenticated } = useAuthStore();
-
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
@@ -99,23 +92,8 @@ function App() {
         <Router>
           <Box sx={{ display: 'flex', height: '100vh' }}>
             <Routes>
-              {/* Public Routes */}
-              <Route 
-                path="/login" 
-                element={
-                  isAuthenticated ? <Navigate to="/" replace /> : <Login />
-                } 
-              />
-              
-              {/* Protected Routes */}
-              <Route 
-                path="/" 
-                element={
-                  <ProtectedRoute>
-                    <Layout />
-                  </ProtectedRoute>
-                }
-              >
+              {/* Main Application Routes */}
+              <Route path="/" element={<Layout />}>
                 <Route index element={<Dashboard />} />
                 <Route path="pipelines" element={<Pipelines />} />
                 <Route path="pipelines/:id" element={<PipelineDetails />} />

@@ -1,13 +1,12 @@
-import { Router, Response } from 'express';
-import { AuthRequest } from '../middleware/auth';
+import { Router, Request, Response } from 'express';
 import { asyncHandler } from '../middleware/errorHandler';
 import { logger } from '../utils/logger';
 
 const router = Router();
 
 // GET /api/metrics/dashboard - Dashboard summary metrics
-router.get('/dashboard', asyncHandler(async (req: AuthRequest, res: Response) => {
-  logger.info('Fetching dashboard metrics', { userId: req.user?.id });
+router.get('/dashboard', asyncHandler(async (req: Request, res: Response) => {
+  logger.info('Fetching dashboard metrics', { userId: "system" });
 
   const mockDashboardMetrics = {
     overview: {
@@ -63,11 +62,11 @@ router.get('/dashboard', asyncHandler(async (req: AuthRequest, res: Response) =>
 }));
 
 // GET /api/metrics/trends - Historical trend data
-router.get('/trends', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.get('/trends', asyncHandler(async (req: Request, res: Response) => {
   const { period = 'day', days = 7 } = req.query;
 
   logger.info('Fetching trend metrics', { 
-    userId: req.user?.id, 
+    userId: "system", 
     period, 
     days 
   });
@@ -94,11 +93,11 @@ router.get('/trends', asyncHandler(async (req: AuthRequest, res: Response) => {
 }));
 
 // GET /api/metrics/success-rate - Success rate over time
-router.get('/success-rate', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.get('/success-rate', asyncHandler(async (req: Request, res: Response) => {
   const { pipelineId, period = 'day', limit = 30 } = req.query;
 
   logger.info('Fetching success rate metrics', { 
-    userId: req.user?.id, 
+    userId: "system", 
     pipelineId, 
     period 
   });
@@ -124,11 +123,11 @@ router.get('/success-rate', asyncHandler(async (req: AuthRequest, res: Response)
 }));
 
 // GET /api/metrics/build-time - Build time analytics
-router.get('/build-time', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.get('/build-time', asyncHandler(async (req: Request, res: Response) => {
   const { pipelineId, period = 'day', limit = 30 } = req.query;
 
   logger.info('Fetching build time metrics', { 
-    userId: req.user?.id, 
+    userId: "system", 
     pipelineId, 
     period 
   });
@@ -155,11 +154,11 @@ router.get('/build-time', asyncHandler(async (req: AuthRequest, res: Response) =
 }));
 
 // GET /api/metrics/failure-analysis - Failure pattern analysis
-router.get('/failure-analysis', asyncHandler(async (req: AuthRequest, res: Response) => {
+router.get('/failure-analysis', asyncHandler(async (req: Request, res: Response) => {
   const { pipelineId, period = 'week' } = req.query;
 
   logger.info('Fetching failure analysis', { 
-    userId: req.user?.id, 
+    userId: "system", 
     pipelineId, 
     period 
   });

@@ -1,0 +1,95 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "CI/CD Pipeline Advanced Analytics",
+    "tags": ["cicd", "monitoring", "advanced"],
+    "style": "dark",
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Pipeline Success Rate Trend",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "avg(rate(cicd_pipeline_success_total[5m])) * 100",
+            "legendFormat": "Success Rate %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "yellow", "value": 80},
+                {"color": "green", "value": 95}
+              ]
+            },
+            "unit": "percent"
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Build Duration Distribution",
+        "type": "heatmap",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(cicd_build_duration_seconds_bucket[5m]))",
+            "legendFormat": "P95 Build Time"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "System Resource Usage",
+        "type": "graph",
+        "targets": [
+          {
+            "expr": "rate(container_cpu_usage_seconds_total[5m]) * 100",
+            "legendFormat": "CPU Usage %"
+          },
+          {
+            "expr": "(container_memory_usage_bytes / container_spec_memory_limit_bytes) * 100",
+            "legendFormat": "Memory Usage %"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "Pipeline Failure Analysis",
+        "type": "piechart",
+        "targets": [
+          {
+            "expr": "sum by (failure_reason) (cicd_pipeline_failure_total)",
+            "legendFormat": "{{ failure_reason }}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 5,
+        "title": "Active Pipelines by Environment",
+        "type": "bargauge",
+        "targets": [
+          {
+            "expr": "sum by (environment) (cicd_active_pipelines)",
+            "legendFormat": "{{ environment }}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "10s"
+  }
+}

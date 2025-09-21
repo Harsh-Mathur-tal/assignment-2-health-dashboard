@@ -10,17 +10,16 @@ import { logger } from './utils/logger';
 import { connectRedis } from './config/redis';
 
 // Route imports
-import authRoutes from './routes/auth';
 import pipelineRoutes from './routes/pipelines';
 import metricsRoutes from './routes/metrics';
 import alertRoutes from './routes/alerts';
 import webhookRoutes from './routes/webhooks';
 import integrationRoutes from './routes/integrations';
 import demoRoutes from './routes/demo';
+import monitoringRoutes from './routes/monitoring';
 
 // Middleware imports
 import { errorHandler } from './middleware/errorHandler';
-import { authenticateToken } from './middleware/auth';
 import { requestLogger } from './middleware/requestLogger';
 
 class App {
@@ -111,16 +110,16 @@ class App {
   }
 
   private initializeRoutes(): void {
-    // Public routes (no authentication required)
-    this.app.use('/api/auth', authRoutes);
+    // Public routes
     this.app.use('/api/webhooks', webhookRoutes);
+    this.app.use('/api/monitoring', monitoringRoutes); // Monitoring endpoints (public for Prometheus)
 
-    // Protected routes (authentication required)
-    this.app.use('/api/pipelines', authenticateToken, pipelineRoutes);
-    this.app.use('/api/metrics', authenticateToken, metricsRoutes);
-    this.app.use('/api/alerts', authenticateToken, alertRoutes);
-    this.app.use('/api/integrations', authenticateToken, integrationRoutes);
-    this.app.use('/api/demo', authenticateToken, demoRoutes);
+    // API routes (no authentication required)
+    this.app.use('/api/pipelines', pipelineRoutes);
+    this.app.use('/api/metrics', metricsRoutes);
+    this.app.use('/api/alerts', alertRoutes);
+    this.app.use('/api/integrations', integrationRoutes);
+    this.app.use('/api/demo', demoRoutes);
 
     // API documentation endpoint
     this.app.get('/api', (req, res) => {
@@ -129,13 +128,13 @@ class App {
         version: '1.0.0',
         description: 'REST API for monitoring CI/CD pipeline health and metrics',
         endpoints: {
-          auth: '/api/auth',
           pipelines: '/api/pipelines',
           metrics: '/api/metrics',
           alerts: '/api/alerts',
           webhooks: '/api/webhooks',
           integrations: '/api/integrations',
           demo: '/api/demo',
+          monitoring: '/api/monitoring',
         },
         documentation: '/api/docs',
         health: '/health',
